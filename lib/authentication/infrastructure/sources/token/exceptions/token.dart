@@ -1,0 +1,1 @@
+class TokenException implements Exception {}
