@@ -1,5 +1,5 @@
 import 'package:rental_app/common/export.dart';
-import 'package:foundation/export.dart';
+import 'package:foundation/export.dart' hide Input;
 import 'package:rental_app/authentication/export.dart';
 
 part 'event.dart';
@@ -13,7 +13,6 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }) : super(SignUpState.empty()) {
     on<SignUpEmailChanged>(_onEmailChanged);
     on<SignUpPasswordChanged>(_onPasswordChanged);
-    on<SignUpCountryChanged>(_onCountryChanged);
     on<SignUpSubmitted>(_onSubmitted);
   }
 
@@ -23,17 +22,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   ) {
     emit(state.copyWith(
       status: Status.empty(),
-      email: event.email,
-    ));
-  }
-
-  void _onCountryChanged(
-    SignUpCountryChanged event,
-    Emitter<SignUpState> emit,
-  ) {
-    emit(state.copyWith(
-      status: Status.empty(),
-      country: event.country,
+      email: Input(EmailAddress(event.email)),
     ));
   }
 
@@ -43,7 +32,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   ) {
     emit(state.copyWith(
       status: Status.empty(),
-      password: event.password,
+      password: Input(Password(event.password)),
     ));
   }
 
@@ -55,9 +44,20 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       status: Status.loading(),
     ));
 
+    bool isEmailValid = state.email.isValid();
+    bool isPasswordValid = state.password.isValid();
+
+    if (!isEmailValid || !isPasswordValid) {
+      emit(state.copyWith(
+          email: state.email.copyWith(validate: !isEmailValid),
+          password: state.password.copyWith(validate: !isPasswordValid),
+          status: Status.empty()));
+      return;
+    }
+
     final credential = SignUp(
-      password: state.password,
-      username: state.email,
+      password: state.password.getOrElse(''),
+      username: state.email.getOrElse(''),
     );
 
     final Try<ClientFailure, Unit> response = await signUp(credential);

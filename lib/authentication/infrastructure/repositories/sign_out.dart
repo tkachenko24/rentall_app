@@ -4,11 +4,9 @@ import 'package:rental_app/authentication/export.dart';
 import 'package:rental_app/common/export.dart';
 
 class SignOutImplementation implements SignOutRepository {
-  final SignInWithCredentialsRemote remote;
   final TokenLocale locale;
 
   SignOutImplementation({
-    required this.remote,
     required this.locale,
   });
 

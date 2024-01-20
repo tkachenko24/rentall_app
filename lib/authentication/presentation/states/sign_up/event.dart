@@ -25,13 +25,4 @@ class SignUpPasswordChanged extends SignUpEvent {
   List<Object> get props => [password];
 }
 
-class SignUpCountryChanged extends SignUpEvent {
-  final String country;
-
-  const SignUpCountryChanged(this.country);
-
-  @override
-  List<Object> get props => [country];
-}
-
 class SignUpSubmitted extends SignUpEvent {}

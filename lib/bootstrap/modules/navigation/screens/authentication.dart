@@ -20,7 +20,7 @@ class AuthenticationScreens extends Screens {
       path: signIn.path,
       name: signIn.name,
       redirect: ScreenGuards([
-        AuthenticationGuard(),
+        BootstrapGuard(),
       ]),
       builder: (BuildContext context, GoRouterState state) {
         return BlocProvider<SignInBloc>(
@@ -39,7 +39,7 @@ class AuthenticationScreens extends Screens {
       path: signUp.path,
       name: signUp.name,
       redirect: ScreenGuards([
-        AuthenticationGuard(),
+        BootstrapGuard(),
       ]),
       builder: (BuildContext context, GoRouterState state) {
         return BlocProvider<SignUpBloc>(

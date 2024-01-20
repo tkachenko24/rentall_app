@@ -1,6 +1,8 @@
-import 'package:rental_app/bootstrap/modules/export.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:rental_app/bootstrap/modules/export.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'injectable.dart';
 
 import 'package:rental_app/authentication/export.dart';
@@ -19,6 +21,24 @@ class AuthenticationInjectable extends Injectable {
       instanceName: dio,
     );
 
+    it.registerLazySingleton<FirebaseAuth>(
+      () {
+        return FirebaseAuth.instance;
+      },
+    );
+
+    // it.registerLazySingletonAsync<SharedPreferences>(
+    //     () => SharedPreferences.getInstance());
+
+    // it.registerLazySingleton<TokenLocale>(
+    //   () {
+    //     return TokenSharedPreferencesImplementation(
+    //       storage: it.get(),
+    //       mapper: TokenMapToTokenEntityMapper(),
+    //     );
+    //   },
+    // );
+
     it.registerLazySingleton<TokenLocale>(
       () {
         return TokenFlutterSecureStorageImplementation(
@@ -27,6 +47,15 @@ class AuthenticationInjectable extends Injectable {
         );
       },
     );
+
+    // it.registerLazySingleton<TokenLocale>(
+    //   () {
+    //     return TokenFirebaseImplementation(
+    //       storage: it.get(),
+    //       mapper: TokenMapToTokenEntityMapper(),
+    //     );
+    //   },
+    // );
 
     it.registerLazySingleton<SignInWithCredentialsRemote>(
       () {
@@ -65,7 +94,6 @@ class AuthenticationInjectable extends Injectable {
     it.registerLazySingleton<CheckSignedInRepository>(
       () {
         return CheckSignedInImplementation(
-          remote: it.get(),
           locale: it.get(),
         );
       },
@@ -74,7 +102,6 @@ class AuthenticationInjectable extends Injectable {
     it.registerLazySingleton<SignOutRepository>(
       () {
         return SignOutImplementation(
-          remote: it.get(),
           locale: it.get(),
         );
       },

@@ -25,13 +25,4 @@ class SignInPasswordChanged extends SignInEvent {
   List<Object> get props => [password];
 }
 
-class SignInCaptchaChanged extends SignInEvent {
-  final String captcha;
-
-  const SignInCaptchaChanged(this.captcha);
-
-  @override
-  List<Object> get props => [captcha];
-}
-
 class SignInSubmitted extends SignInEvent {}

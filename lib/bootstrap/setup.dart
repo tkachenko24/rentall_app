@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -30,13 +31,19 @@ Future<void> setup() async {
 
   final signOut = SignOutBloc(signOut: locator.get());
   final authentication = AuthenticationBloc(check: locator.get());
+  print(authentication.state);
   final preferences = PreferencesBloc((PreferencesState state) async {
+    print(authentication.state);
     if (authentication.state.isOther) {
+      print('object');
       await for (final event in authentication.stream) {
         if (event != Authentication.other) break;
       }
     }
   });
+  print(authentication.state);
+  print(preferences.state.status);
+
   final providers = [
     BlocProvider.value(value: signOut),
     BlocProvider.value(value: preferences),
@@ -65,6 +72,8 @@ Future<void> setup() async {
           ) {
             return MaterialApp.router(
               debugShowCheckedModeBanner: false,
+              theme: FlexThemeData.light(
+                  useMaterial3: true, scheme: FlexScheme.greenM3),
               routerDelegate: routerDelegate,
               routeInformationParser: routeInformationParser,
               routeInformationProvider: routeInformationProvider,

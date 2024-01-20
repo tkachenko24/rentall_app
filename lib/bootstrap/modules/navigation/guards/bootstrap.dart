@@ -16,7 +16,6 @@ class BootstrapGuard implements ScreenGuard {
     if (isSplash && isFinish) {
       return DashboardScreens.dashboard.path;
     }
-
     return null;
   }
 }

@@ -13,9 +13,7 @@ class DashboardScreens extends Screens {
     GoRoute(
       path: dashboard.path,
       name: dashboard.name,
-      redirect: ScreenGuards([
-        AuthenticationGuard(),
-      ]),
+      redirect: ScreenGuards([AuthenticationGuard(), BootstrapGuard()]),
       builder: (BuildContext context, GoRouterState state) {
         return DashboardScreen(
           signOut: () {},

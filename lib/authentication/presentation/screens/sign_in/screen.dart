@@ -12,7 +12,6 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -32,17 +31,23 @@ class SignInScreen extends StatelessWidget {
                   buildWhen: (previous, current) =>
                       previous.email != current.email,
                   builder: (context, state) {
+                    String? emailError = state.email.isEnabledValidator()
+                        ? state.email.check(
+                            Validate(
+                              email: () => 'Wrong e-mail',
+                              other: () => 'Unknown error',
+                            ),
+                          )
+                        : null;
+
                     SignInBloc bloc = context.read<SignInBloc>();
-                    return TextFormField(
-                      initialValue: state.email,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Email',
-                      ),
-                      onChanged: (String value) {
-                        bloc.add(SignInEmailChanged(value));
-                      },
-                    );
+                    return CustomField(
+                        error: emailError,
+                        textInputType: TextInputType.emailAddress,
+                        onChanged: (value) =>
+                            bloc.add(SignInEmailChanged(value)),
+                        errorHint: 'E-mail must be in the correct format',
+                        label: 'Email');
                   },
                 ),
                 const Spacer(
@@ -50,20 +55,26 @@ class SignInScreen extends StatelessWidget {
                 ),
                 BlocBuilder<SignInBloc, SignInState>(
                   buildWhen: (previous, current) =>
-                      previous.email != current.email,
+                      previous.password != current.password,
                   builder: (context, state) {
+                    String? passwordError = state.password.isEnabledValidator()
+                        ? state.password.check(
+                            Validate(
+                              password: () => 'Wrong password',
+                              other: () => 'Unknown error',
+                            ),
+                          )
+                        : null;
+
                     SignInBloc bloc = context.read<SignInBloc>();
-                    return TextFormField(
-                      initialValue: state.password,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Password',
-                      ),
-                      onChanged: (String value) {
-                        bloc.add(SignInPasswordChanged(value));
-                      },
-                    );
+                    return CustomField(
+                        error: passwordError,
+                        textInputType: TextInputType.text,
+                        onChanged: (value) =>
+                            bloc.add(SignInPasswordChanged(value)),
+                        errorHint:
+                            'Password must be minimally 8 characters and include upper case letters, lowercase letters, 2 special characters and at least 3 numbers.',
+                        label: 'Password');
                   },
                 ),
                 const Spacer(
@@ -90,22 +101,15 @@ class SignInScreen extends StatelessWidget {
                   builder: (context, state) {
                     SignInBloc bloc = context.read<SignInBloc>();
                     return ElevatedButton(
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll<Color>(
-                          Colors.green,
-                        ),
-                      ),
-                      child: const Text('send'),
+                      child: const Text('Send'),
                       onPressed: () {
+                        print(state.password.isValid());
                         bloc.add(SignInSubmitted());
                       },
                     );
                   },
                 ),
                 TextButton(
-                  style: TextButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 14),
-                  ),
                   onPressed: onSignUp,
                   child: const Text('Sign Up'),
                 ),

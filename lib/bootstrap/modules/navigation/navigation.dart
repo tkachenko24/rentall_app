@@ -25,7 +25,7 @@ class Navigation extends StatelessWidget {
     DashboardScreens(),
   ];
 
-  Navigation({Key? key, required this.builder}) : super(key: key);
+  Navigation({super.key, required this.builder});
 
   @override
   Widget build(BuildContext context) {

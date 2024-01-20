@@ -1,8 +1,8 @@
 part of 'bloc.dart';
 
 class SignInState extends Equatable {
-  final String email;
-  final String password;
+  final Input<EmailAddress> email;
+  final Input<Password> password;
   final Status<ClientFailure, Unit> status;
 
   const SignInState({
@@ -12,15 +12,14 @@ class SignInState extends Equatable {
   });
 
   factory SignInState.empty() => SignInState(
-        email: 'eve.holt@reqres.in',
-        password: 'cityslicka',
+        email: Input(EmailAddress('')),
+        password: Input(Password(''), obscuring: true),
         status: Status.empty(),
       );
 
   SignInState copyWith({
-    String? email,
-    String? password,
-    String? captcha,
+    final Input<EmailAddress>? email,
+    final Input<Password>? password,
     Status<ClientFailure, Unit>? status,
   }) {
     return SignInState(
