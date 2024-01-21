@@ -1,12 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:rental_app/authentication/infrastructure/export.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'dart:convert';
 
 import 'package:foundation/export.dart';
-import '../models/status.dart';
 
 class TokenFlutterSecureStorageImplementation implements TokenLocale {
   final _controller = StreamController<TokenStatusModel>();
@@ -58,7 +58,7 @@ class TokenFlutterSecureStorageImplementation implements TokenLocale {
         return mapper.map(data);
       }
     } catch (error) {
-      print(error);
+      debugPrint(error.toString());
     }
     throw TokenException();
   }

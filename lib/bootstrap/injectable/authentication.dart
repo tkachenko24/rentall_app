@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rental_app/bootstrap/modules/export.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'injectable.dart';
 
 import 'package:rental_app/authentication/export.dart';
@@ -23,12 +21,9 @@ class AuthenticationInjectable extends Injectable {
 
     it.registerLazySingleton<FirebaseAuth>(
       () {
-        return FirebaseAuth.instance;
+        return FirebaseAuth.instanceFor(app: it.get());
       },
     );
-
-    // it.registerLazySingletonAsync<SharedPreferences>(
-    //     () => SharedPreferences.getInstance());
 
     // it.registerLazySingleton<TokenLocale>(
     //   () {
@@ -39,27 +34,27 @@ class AuthenticationInjectable extends Injectable {
     //   },
     // );
 
-    it.registerLazySingleton<TokenLocale>(
-      () {
-        return TokenFlutterSecureStorageImplementation(
-          storage: const FlutterSecureStorage(),
-          mapper: TokenMapToTokenEntityMapper(),
-        );
-      },
-    );
-
     // it.registerLazySingleton<TokenLocale>(
     //   () {
-    //     return TokenFirebaseImplementation(
-    //       storage: it.get(),
+    //     return TokenFlutterSecureStorageImplementation(
+    //       storage: const FlutterSecureStorage(),
     //       mapper: TokenMapToTokenEntityMapper(),
     //     );
     //   },
     // );
 
+    it.registerLazySingleton<TokenLocale>(
+      () {
+        return TokenFirebaseImplementation(
+          storage: it.get(),
+          mapper: TokenMapToTokenEntityMapper(),
+        );
+      },
+    );
+
     it.registerLazySingleton<SignInWithCredentialsRemote>(
       () {
-        return SignInWithCredentialsDioImplementation(
+        return SignInWithCredentialsFirebaseImplementation(
           client: it.get(),
         );
       },
@@ -67,7 +62,7 @@ class AuthenticationInjectable extends Injectable {
 
     it.registerLazySingleton<SignUpWithCredentialsRemote>(
       () {
-        return SignUpWithCredentialsDioImplementation(
+        return SignUpWithCredentialsFirebaseImplementation(
           client: it.get(),
         );
       },

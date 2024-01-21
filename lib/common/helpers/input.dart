@@ -1,24 +1,24 @@
 import 'package:rental_app/common/helpers/export.dart';
 
-class Input<T extends ValueAbstract> extends ValueAbstract {
+class FieldInput<T extends ValueAbstract> extends ValueAbstract {
   final T _input;
 
   final bool obscuring;
 
   final bool validate;
 
-  const Input(
+  const FieldInput(
     this._input, {
     this.obscuring = false,
     this.validate = false,
   });
 
-  Input<T> copyWith({
+  FieldInput<T> copyWith({
     T? value,
     bool? validate,
     bool? obscuring,
   }) {
-    return Input(
+    return FieldInput(
       value ?? _input,
       validate: validate ?? this.validate,
       obscuring: obscuring ?? this.obscuring,

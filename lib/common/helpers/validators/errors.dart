@@ -3,7 +3,7 @@ import 'package:foundation/export.dart';
 class Validate<W> {
   final W Function()? email;
   final W Function()? password;
-
+  final W Function()? number;
   final W Function()? min;
   final W Function()? empty;
   final W Function() other;
@@ -11,6 +11,7 @@ class Validate<W> {
   const Validate({
     this.email,
     this.password,
+    this.number,
     this.empty,
     this.min,
     required this.other,
@@ -47,6 +48,21 @@ class PasswordFailure extends ValidateFailure {
 
     if (password != null) {
       return password.call();
+    }
+
+    return actions.other();
+  }
+}
+
+class NumbersFailure extends ValidateFailure {
+  const NumbersFailure();
+
+  @override
+  W check<W>(Validate actions) {
+    final number = actions.number;
+
+    if (number != null) {
+      return number.call();
     }
 
     return actions.other();

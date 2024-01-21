@@ -4,9 +4,11 @@ import 'package:rental_app/common/export.dart';
 
 class SignInScreen extends StatelessWidget {
   final void Function() onSignUp;
+  final void Function() onSubmitted;
   const SignInScreen({
     super.key,
     required this.onSignUp,
+    required this.onSubmitted,
   });
 
   @override
@@ -69,6 +71,7 @@ class SignInScreen extends StatelessWidget {
                     SignInBloc bloc = context.read<SignInBloc>();
                     return CustomField(
                         error: passwordError,
+                        obscureText: true,
                         textInputType: TextInputType.text,
                         onChanged: (value) =>
                             bloc.add(SignInPasswordChanged(value)),
@@ -95,18 +98,22 @@ class SignInScreen extends StatelessWidget {
                     );
                   },
                 ),
-                BlocBuilder<SignInBloc, SignInState>(
+                BlocConsumer<SignInBloc, SignInState>(
                   buildWhen: (previous, current) =>
                       previous.status != current.status,
                   builder: (context, state) {
                     SignInBloc bloc = context.read<SignInBloc>();
                     return ElevatedButton(
                       child: const Text('Send'),
-                      onPressed: () {
-                        print(state.password.isValid());
+                      onPressed: () async {
                         bloc.add(SignInSubmitted());
                       },
                     );
+                  },
+                  listener: (context, state) {
+                    if (state.status.isSuccess()) {
+                      onSubmitted.call();
+                    }
                   },
                 ),
                 TextButton(

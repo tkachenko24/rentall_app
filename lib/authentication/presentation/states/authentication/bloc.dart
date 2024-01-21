@@ -15,7 +15,9 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, Authentication> {
     required this.check,
   }) : super(Authentication.other) {
     on<AuthenticationChanged>(_onChanged);
+  }
 
+  setup() {
     _statusSubscription = check.invoke(Empty()).asBroadcastStream().listen(
       (status) {
         add(AuthenticationChanged(status));

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -8,16 +7,16 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return const Scaffold(
+      body: SizedBox(
         width: double.infinity,
         height: double.infinity,
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CupertinoActivityIndicator(
-              radius: 40,
+            CircularProgressIndicator(
+              strokeWidth: 4,
             )
 
             // Positioned(

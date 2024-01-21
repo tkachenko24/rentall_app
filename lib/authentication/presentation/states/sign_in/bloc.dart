@@ -22,7 +22,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   ) {
     emit(state.copyWith(
       status: Status.empty(),
-      email: Input(EmailAddress(event.email)),
+      email: FieldInput(EmailAddress(event.email)),
     ));
   }
 
@@ -32,7 +32,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   ) {
     emit(state.copyWith(
       status: Status.empty(),
-      password: Input(Password(event.password)),
+      password: FieldInput(Password(event.password)),
     ));
   }
 

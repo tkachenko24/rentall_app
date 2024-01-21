@@ -28,7 +28,7 @@ class SignUpWithCredentialsFirebaseImplementation
 
     throw const SignInExceptions(
       name: 'OTHER_ERROR',
-      description: 'OTHER_ERROR',
+      description: 'Wrong credentials',
     );
   }
 }

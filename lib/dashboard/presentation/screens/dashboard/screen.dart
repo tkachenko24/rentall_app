@@ -1,40 +1,89 @@
 import 'package:flutter/material.dart';
-import 'package:rental_app/authentication/export.dart';
+import 'package:rental_app/common/presentation/export.dart';
+import 'package:rental_app/dashboard/export.dart';
+
+import 'widgets/export.dart';
 
 class DashboardScreen extends StatelessWidget {
   final void Function() signOut;
+  final void Function() addCar;
+  final void Function(int) car;
+
+  final ThemeData theme;
   const DashboardScreen({
-    Key? key,
+    super.key,
     required this.signOut,
-  }) : super(key: key);
+    required this.addCar,
+    required this.theme,
+    required this.car,
+  });
 
   @override
   Widget build(BuildContext context) {
+    context.read<CarsBloc>().add(const FetchCars());
     return Scaffold(
+      floatingActionButton: IconButton(
+        onPressed: () => addCar.call(),
+        icon: const Icon(Icons.add_circle_rounded),
+        color: theme.primaryColor,
+        iconSize: 50,
+      ),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
-          'Dashboard Screen',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-            fontStyle: FontStyle.normal,
-            color: Colors.black,
-          ),
+        title: Text(
+          'Our Cars',
+          style:
+              Fonts.titleLarge.copyWith(color: theme.scaffoldBackgroundColor),
         ),
         toolbarHeight: 60,
-        backgroundColor: Colors.white,
-        elevation: 0.0,
+        backgroundColor: theme.primaryColorLight,
+        leading: Transform.flip(
+          flipX: true,
+          child: IconButton(
+            onPressed: signOut,
+            icon: const Icon(
+              Icons.logout_rounded,
+            ),
+            color: theme.scaffoldBackgroundColor,
+          ),
+        ),
       ),
-      body: const SizedBox(
+      body: SizedBox(
         width: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SignOut(),
-          ],
+        child: BlocBuilder<CarsBloc, CarsState>(
+          buildWhen: (previous, current) => previous.cars != current.cars,
+          builder: (context, state) {
+            return state.status.isLoading()
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : state.cars.isNotEmpty
+                    ? CarsList(
+                        theme: theme,
+                        state: state,
+                        car: car,
+                      )
+                    : Column(
+                        children: [
+                          const Spacer(),
+                          Center(
+                            child: Text(
+                              'No cars available, try add a new one :-)!',
+                              style: Fonts.titleLarge,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const Spacer(),
+                          Transform.flip(
+                              flipY: true,
+                              child: const Icon(
+                                Icons.arrow_outward_rounded,
+                                size: 50,
+                              )),
+                          const Spacer(),
+                        ],
+                      );
+          },
         ),
       ),
     );

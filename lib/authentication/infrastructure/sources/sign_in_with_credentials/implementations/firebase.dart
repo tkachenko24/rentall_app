@@ -19,8 +19,8 @@ class SignInWithCredentialsFirebaseImplementation
           email: email, password: password);
       User? user = userCredential.user;
       if (user != null) {
-        String token = userCredential.credential.toString();
-        return SignInModel(token: token);
+        String? token = userCredential.user?.refreshToken.toString();
+        return SignInModel(token: token ?? 'token');
       }
     } catch (error) {
       debugPrint(error.toString());
@@ -28,7 +28,7 @@ class SignInWithCredentialsFirebaseImplementation
 
     throw const SignInExceptions(
       name: 'OTHER_ERROR',
-      description: 'OTHER_ERROR',
+      description: 'Wrong credentials',
     );
   }
 }

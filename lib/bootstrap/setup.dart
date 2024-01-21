@@ -16,6 +16,7 @@ Future<void> setup() async {
     injectable: [
       CommonInjectable(),
       AuthenticationInjectable(),
+      DashboardInjectable(),
     ],
   );
 
@@ -31,24 +32,22 @@ Future<void> setup() async {
 
   final signOut = SignOutBloc(signOut: locator.get());
   final authentication = AuthenticationBloc(check: locator.get());
-  print(authentication.state);
   final preferences = PreferencesBloc((PreferencesState state) async {
-    print(authentication.state);
     if (authentication.state.isOther) {
-      print('object');
+      authentication.setup();
       await for (final event in authentication.stream) {
         if (event != Authentication.other) break;
       }
     }
   });
-  print(authentication.state);
-  print(preferences.state.status);
 
   final providers = [
     BlocProvider.value(value: signOut),
     BlocProvider.value(value: preferences),
     BlocProvider.value(value: authentication),
   ];
+
+  preferences.add(const Initialization());
 
   final List<SingleChildWidget> listeners = [
     BlocListener<AuthenticationBloc, Authentication>(

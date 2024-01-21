@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:rental_app/authentication/infrastructure/export.dart';
 
 import 'package:foundation/export.dart';
@@ -23,13 +24,13 @@ class TokenFirebaseImplementation implements TokenLocale {
     TokenModel value,
   ) async {
     try {
-      AuthCredential credential = jsonDecode(value.token);
-      UserCredential? newCredential =
-          await storage.currentUser?.reauthenticateWithCredential(credential);
-      if (newCredential != null) {
+      User? credential = storage.currentUser;
+
+      if (credential != null) {
         _controller.add(TokenStatusModel.exist);
       }
     } catch (error) {
+      debugPrint(error.toString());
       throw TokenException();
     }
   }
@@ -54,7 +55,7 @@ class TokenFirebaseImplementation implements TokenLocale {
         return mapper.map(data);
       }
     } catch (error) {
-      print(error);
+      debugPrint(error.toString());
     }
     throw TokenException();
   }
@@ -63,7 +64,6 @@ class TokenFirebaseImplementation implements TokenLocale {
   Future<bool> has() async {
     try {
       String? value = await storage.currentUser?.getIdToken();
-      print(value);
       return value != null;
     } catch (error) {
       throw TokenException();

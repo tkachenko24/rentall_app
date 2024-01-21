@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:424795630325:android:6bc8f195fc67333ddbf3bc',
     messagingSenderId: '424795630325',
     projectId: 'rentalcar-4fa8a',
+    databaseURL: 'https://rentalcar-4fa8a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'rentalcar-4fa8a.appspot.com',
   );
 
@@ -62,6 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:424795630325:ios:5ba525718297dda4dbf3bc',
     messagingSenderId: '424795630325',
     projectId: 'rentalcar-4fa8a',
+    databaseURL: 'https://rentalcar-4fa8a-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'rentalcar-4fa8a.appspot.com',
     iosBundleId: 'com.example.rentallApp',
   );

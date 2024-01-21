@@ -4,8 +4,8 @@ import 'package:rental_app/authentication/export.dart';
 
 class SignOut extends StatelessWidget {
   const SignOut({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
