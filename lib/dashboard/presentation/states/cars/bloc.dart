@@ -97,6 +97,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
               status: Status.success(unit),
               cars: success,
             )));
+    print(state.status);
   }
 
   void _onDeleteCar(

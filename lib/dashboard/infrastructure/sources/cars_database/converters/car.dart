@@ -15,7 +15,7 @@ class CarConverter {
   }
 
   CarModel fromMapString(String source) {
-    Map<String, dynamic> map = jsonDecode(source);
+    Map<String, dynamic> map = json.decode(source);
     return CarModel(
       make: map['make'],
       model: map['model'],

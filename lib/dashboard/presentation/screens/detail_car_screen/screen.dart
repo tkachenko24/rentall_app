@@ -61,7 +61,7 @@ class _DetailCarScreenState extends State<DetailCarScreen> {
               return IconButton(
                 onPressed: () => {
                   context.read<CarsBloc>().add(DeleteCar(widget.car)),
-                  state.status.isSuccess() ? widget.back.call() : null,
+                  state.status.isSuccess() ? widget.back : null,
                 },
                 icon: Icon(
                   Icons.delete_forever_rounded,

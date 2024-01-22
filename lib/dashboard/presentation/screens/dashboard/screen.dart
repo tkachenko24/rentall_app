@@ -51,7 +51,7 @@ class DashboardScreen extends StatelessWidget {
       body: SizedBox(
         width: double.infinity,
         child: BlocBuilder<CarsBloc, CarsState>(
-          buildWhen: (previous, current) => previous.cars != current.cars,
+          buildWhen: (previous, current) => previous.status != current.status,
           builder: (context, state) {
             return state.status.isLoading()
                 ? const Center(
