@@ -93,6 +93,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
       status: Status.loading(),
     ));
     final Try<DataBaseFailure, List<Car>> response = await fetch(Car.empty());
+    print(response);
     response.fold(
         (failed) => emit(state.copyWith(status: Status.failed(failed))),
         (success) => emit(state.copyWith(
