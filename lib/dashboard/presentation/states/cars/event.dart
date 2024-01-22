@@ -37,6 +37,13 @@ class AddCar extends CarsEvent {
   List<Object?> get props => [];
 }
 
+class SortCars extends CarsEvent {
+  const SortCars();
+
+  @override
+  List<Object?> get props => [];
+}
+
 class NewCarAvailabilityChanged extends CarsEvent {
   final bool value;
   const NewCarAvailabilityChanged(this.value);

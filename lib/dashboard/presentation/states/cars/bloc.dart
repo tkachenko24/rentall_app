@@ -1,6 +1,7 @@
 import 'package:rental_app/common/export.dart';
 import 'package:foundation/export.dart' hide Input;
 import 'package:rental_app/dashboard/export.dart';
+import 'package:rental_app/dashboard/presentation/screens/detail_car_screen/export.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -26,6 +27,7 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
     on<EditCar>(_onEditCar);
     on<DeleteCar>(_onDeleteCar);
     on<AddCar>(_onAddCar);
+    on<SortCars>(_onSortCars);
   }
 
   void _onAvailability(
@@ -146,5 +148,51 @@ class CarsBloc extends Bloc<CarsEvent, CarsState> {
               status: Status.success(unit),
               cars: success,
             )));
+  }
+
+  void _onSortCars(
+    SortCars event,
+    Emitter<CarsState> emit,
+  ) async {
+    SortMethods nextSortMethod() {
+      switch (state.sort) {
+        case SortMethods.byNameAscending:
+          return SortMethods.byNameDescending;
+        case SortMethods.byNameDescending:
+          return SortMethods.byPriceAscending;
+        case SortMethods.byPriceAscending:
+          return SortMethods.byPriceDescending;
+        case SortMethods.byPriceDescending:
+          return SortMethods.byNameAscending;
+      }
+    }
+
+    emit(state.copyWith(
+      sort: nextSortMethod(),
+      status: Status.loading(),
+    ));
+
+    List<Car> sortedCars = List<Car>.from(state.cars);
+    sortedCars.sort((a, b) {
+      switch (state.sort) {
+        case SortMethods.byNameAscending:
+          return a.make.getOrElse('').compareTo(b.make.getOrElse(''));
+        case SortMethods.byNameDescending:
+          return b.make.getOrElse('').compareTo(a.make.getOrElse(''));
+        case SortMethods.byPriceAscending:
+          return num.tryParse(a.price.getOrElse(''))!
+              .compareTo(num.tryParse(b.price.getOrElse('')) ?? 0);
+        case SortMethods.byPriceDescending:
+          return num.tryParse(b.price.getOrElse(''))!
+              .compareTo(num.tryParse(a.price.getOrElse('')) ?? 0);
+        default:
+          return 0;
+      }
+    });
+
+    emit(state.copyWith(
+      status: Status.success(unit),
+      cars: sortedCars,
+    ));
   }
 }

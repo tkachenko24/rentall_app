@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rental_app/common/presentation/export.dart';
 import 'package:rental_app/dashboard/export.dart';
+import 'package:rental_app/dashboard/presentation/screens/detail_car_screen/export.dart';
 
 import 'widgets/export.dart';
 
@@ -47,6 +48,25 @@ class DashboardScreen extends StatelessWidget {
             color: theme.scaffoldBackgroundColor,
           ),
         ),
+        actions: [
+          BlocBuilder<CarsBloc, CarsState>(
+            builder: (context, state) {
+              return IconButton(
+                  onPressed: () {
+                    context.read<CarsBloc>().add(const SortCars());
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(sortMessage(state.sort)),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.sort_rounded,
+                    color: theme.scaffoldBackgroundColor,
+                  ));
+            },
+          )
+        ],
       ),
       body: SizedBox(
         width: double.infinity,
