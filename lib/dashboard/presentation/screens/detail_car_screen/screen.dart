@@ -59,9 +59,9 @@ class _DetailCarScreenState extends State<DetailCarScreen> {
           BlocBuilder<CarsBloc, CarsState>(
             builder: (context, state) {
               return IconButton(
-                onPressed: () => {
-                  context.read<CarsBloc>().add(DeleteCar(widget.car)),
-                  state.status.isSuccess() ? widget.back : null,
+                onPressed: () {
+                  widget.back.call();
+                  context.read<CarsBloc>().add(DeleteCar(widget.car));
                 },
                 icon: Icon(
                   Icons.delete_forever_rounded,
@@ -93,8 +93,9 @@ class _DetailCarScreenState extends State<DetailCarScreen> {
                   ),
                   SaveCarButton(
                       theme: widget.theme,
-                      onSuccessSave: () {
+                      onPressed: () {
                         widget.back.call();
+                        context.read<CarsBloc>().add(EditCar(widget.car));
                       },
                       index: widget.car),
                   const Spacer(),

@@ -6,10 +6,10 @@ class SaveCarButton extends StatelessWidget {
   const SaveCarButton({
     super.key,
     required this.theme,
-    required this.onSuccessSave,
+    required this.onPressed,
     required this.index,
   });
-  final void Function() onSuccessSave;
+  final void Function() onPressed;
   final int index;
   final ThemeData theme;
 
@@ -24,8 +24,7 @@ class SaveCarButton extends StatelessWidget {
         return IconButton(
           onPressed: allValid
               ? () {
-                  context.read<CarsBloc>().add(EditCar(index));
-                  onSuccessSave.call();
+                  onPressed.call();
                 }
               : null,
           icon: Icon(
