@@ -25,6 +25,8 @@ class CustomField extends StatelessWidget {
       readOnly: readOnly ?? false,
       obscureText: obscureText ?? false,
       keyboardType: textInputType,
+      textInputAction: TextInputAction.next,
+      onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       decoration: InputDecoration(
           errorText: error != null ? errorHint : null,
           labelText: error ?? label,

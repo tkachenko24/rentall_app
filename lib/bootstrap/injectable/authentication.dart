@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:rental_app/bootstrap/modules/export.dart';
 import 'package:get_it/get_it.dart';
 import 'injectable.dart';
@@ -43,12 +44,21 @@ class AuthenticationInjectable extends Injectable {
     //   },
     // );
 
+    it.registerLazySingleton<BiometricsRepository>(
+        () => BiometricsRepositoryImplementation(local: it.get()));
+
+    it.registerLazySingleton<BiometricsUseCase>(
+        () => BiometricsUseCaseImplementation(repository: it.get()));
+
+    it.registerLazySingleton<BiometricsLocal>(
+        () => BiometricsLocalImplementation(local: LocalAuthentication()));
+
     it.registerLazySingleton<TokenLocale>(
       () {
         return TokenFirebaseImplementation(
-          storage: it.get(),
-          mapper: TokenMapToTokenEntityMapper(),
-        );
+            storage: it.get(),
+            mapper: TokenMapToTokenEntityMapper(),
+            biometrics: it.get());
       },
     );
 

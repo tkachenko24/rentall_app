@@ -10,6 +10,7 @@ class TokenFirebaseImplementation implements TokenLocale {
   final _controller = StreamController<TokenStatusModel>();
 
   final FirebaseAuth storage;
+  final BiometricsLocal biometrics;
   final Mapper<Map<String, dynamic>, TokenModel> mapper;
 
   String get key => 'TOKEN_STORAGE';
@@ -17,6 +18,7 @@ class TokenFirebaseImplementation implements TokenLocale {
   TokenFirebaseImplementation({
     required this.storage,
     required this.mapper,
+    required this.biometrics,
   });
 
   @override
@@ -63,8 +65,8 @@ class TokenFirebaseImplementation implements TokenLocale {
   @override
   Future<bool> has() async {
     try {
-      String? value = await storage.currentUser?.getIdToken();
-      return value != null;
+      String? token = await storage.currentUser?.getIdToken();
+      return token != null ? await biometrics.check() : false;
     } catch (error) {
       throw TokenException();
     }
